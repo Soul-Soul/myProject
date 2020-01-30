@@ -1,27 +1,31 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
       path: '/',
-      name: 'dashboard',
+      name: '登录',
+      component: () => import ('../views/Login')
+  },
+  {
+      path: '/dashboard',
+      name: '首页',
       component: () => import ('../views/dashboard'),
       children: [
           {
               path: '/home',
               name: 'home',
-              component: Home
+              component:() => import('../views/home')
           },
           {
               path: '/about',
               name: 'about',
-              component: () => import( '../views/About.vue')
+              component: () => import( '../views/about')
           }
       ],
-      directive: '/'
+      directive: '/login'
   }
 ]
 
