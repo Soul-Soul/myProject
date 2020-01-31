@@ -17,12 +17,14 @@ const routes = [
           {
               path: '/home',
               name: 'home',
-              component:() => import('../views/home')
+              component:() => import('../views/home'),
+              children:[]
           },
           {
               path: '/about',
               name: 'about',
-              component: () => import( '../views/about')
+              component: () => import( '../views/about'),
+              children:[]
           }
       ],
       directive: '/login'
