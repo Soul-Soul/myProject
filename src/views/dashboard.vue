@@ -12,9 +12,17 @@
                 </Sider>
                 <Layout>
                     <Header :style="{padding: 0}" class="layout-header-bar">
-                        <Icon @click.native="collapsedSider" :class="rotateIcon" :style="{margin: '0 20px'}" type="md-menu" size="24"></Icon>
+                        <div style="display: flex;justify-content: flex-start">
+                            <div>
+                                <Icon @click.native="collapsedSider" :class="rotateIcon" :style="{margin: '0 20px'}" type="md-menu" size="24"></Icon>
+                            </div>
+                            <!--添加面包屑 -->
+                            <Breadcrumb>
+                                <BreadcrumbItem v-for="(item,index) in routerPath" :key="index" :to = "`${item.path}`">{{item.name}}</BreadcrumbItem>
+                            </Breadcrumb>
+                        </div>
                     </Header>
-                    <Content :style="{margin: '20px', background: '#fff', minHeight: '855px'}">
+                    <Content class="contentExample" :style={height:contentExample}>
                         <router-view/>
                     </Content>
                 </Layout>
@@ -26,7 +34,7 @@
 <script>
     import {mapGetters} from 'vuex'
     export default {
-        name: "dashboard",
+        name: 'dashboard',
         data(){
             return{
                 isCollapsed: false,
@@ -40,6 +48,36 @@
                         name: '关于页',
                     }
                 ],
+                contentExample: (document.documentElement.clientHeight - 104) + 'px',
+                fullHeight: document.documentElement.clientHeight, // 设备高度
+                fullWidth:  document.documentElement.clientWidth,  // 设备宽度
+                routerPath: []  // 面包屑路径容器
+            }
+        },
+        watch:{
+            $route(){   // 监听路由变化
+                this.routerPath = []
+                this.routerPath = this.$route.matched
+            },
+            fullHeight (val) { // 增加定时器会避免频繁调用window.onresize方法
+                if(!this.timer) {
+                    this.fullHeight = val
+                    this.timer = true
+                    let that = this
+                    setTimeout(function (){
+                        that.timer = false
+                    },400)
+                }
+            },
+            fullWidth (val) { // 增加定时器会避免频繁调用window.onresize方法
+                if(!this.timer) {
+                    this.fullWidth = val
+                    this.timer = true
+                    let that = this
+                    setTimeout(function (){
+                        that.timer = false
+                    },400)
+                }
             }
         },
         computed: {
@@ -57,6 +95,26 @@
                 ]
             }
         },
+        mounted(){  // 刷新时
+            const that = this
+            that.routerPath = that.$route.matched,
+                // 注：window.onresize只能在项目内触发1次
+            window.onresize = () => {
+                return (() => {
+                    // 通过捕获系统的onresize事件触发我们需要执行的事件
+                    window.fullHeight = document.documentElement.clientHeight
+                    window.fullWidth = document.documentElement.clientWidth
+                    that.fullHeight = window.fullHeight
+                    that.fullWidth = window.fullWidth
+                    that.contentExample = (that.fullHeight - 104) + 'px' // 容器Content高度
+                    if(that.fullWidth < 600){
+                        that.isCollapsed = true
+                    } else {
+                        that.isCollapsed
+                    }
+                })()
+            }
+        },
         methods:{
             collapsedSider () {
                 this.$refs.side1.toggleCollapse();
@@ -69,8 +127,9 @@
     }
 </script>
 
-<style scoped>
+<style>
     .TpST{
+        position: fixed;
         height: 100%;
         width: 100%;
     }
@@ -78,8 +137,16 @@
         border: 1px solid #d7dde4;
         background: #f5f7f9;
         position: relative;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
         border-radius: 4px;
         overflow: hidden;
+    }
+    .contentExample{
+        margin: 20px;
+        background: #fff;
     }
     .layout-header-bar{
         background: #fff;

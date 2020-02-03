@@ -1,6 +1,7 @@
 <template>
   <div>
     关于页
+    <router-view/>
   </div>
 </template>
 

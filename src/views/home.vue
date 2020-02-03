@@ -1,75 +1,47 @@
 <template>
   <div>
-    <Form ref="loginForm" :model="loginForm" :rules="loginRules" inline>
-      <FormItem prop="user">
-        <i-input type="text" v-model="loginForm.username" placeholder="Username">
-        <Icon type="ios-person-outline" slot="prepend"></Icon>
-        </i-input>
-      </FormItem>
-      <FormItem prop="password">
-        <i-input type="password" v-model="loginForm.password" placeholder="Password">
-        <Icon type="ios-lock-outline" slot="prepend"></Icon>
-        </i-input>
-      </FormItem>
-      <FormItem>
-        <Button type="primary" @click="handleSubmit('loginForm')">登录</Button>
-      </FormItem>
-    </Form>
-    <button @click="showPwd">
-      验证码
-    </button>
+    <div class="box1">1</div>
+    <div class="box2">2</div>
+    <div class="box3">3</div>
+    <router-view/>
   </div>
 </template>
 
 <script>
-  import {requestConfirmCode} from '../api/login'
+  // import {clone, deepClone} from '../utils/deepClone.js'
 export default {
   name: 'home',
   components: {
   },
     data(){
-        // 手机号
-        const validateMobile = (rule, value, callback) => {
-            const reg = /^(0|86|17951)?(13[0-9]|14[0-9]|15[0-9]|16[0-9]|17[0-9]|18[0-9]|19[0-9])[0-9]{8}$/
-            if (reg.test(value)) {
-                callback()
-            } else {
-                callback(new Error('请输入正确的手机号码!'))
-            }
-        }
       return{
-          loginForm: {
-              username: '',
-              password: ''
-          },
-          loginRules: {
-              username: [{ required: true, trigger: 'blur', validator: validateMobile }],
-              password: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
-          },
       }
     },
     created(){
     },
     methods:{
-        requestConfirmCode(){
-            requestConfirmCode({
-              mobile: this.loginForm.username
-            }).then(res => {
-                console.log(res)
-            })
-        },
-        showPwd() {
-            this.requestConfirmCode()
-        },
-        handleSubmit(name) {
-            this.$refs[name].validate((valid) => {
-                if (valid) {
-                    this.$Message.success('Success!');
-                } else {
-                    this.$Message.error('Fail!');
-                }
-            })
-        }
     }
 }
 </script>
+
+<style scoped lang="less">
+  *{margin:0;padding:0;}
+  html,body{height:100%; flex-wrap:wrap;} /*flex-wrap:wrap;因为后面有设width：100%*/
+  body{display:flex;}
+  .box1{background: #f00;}
+  .box2{background: #0f0;}
+  .box3{background: #00f;}
+  @media screen and (min-width:1100px){ /*三栏布局*/
+    .box1{width: 100px;} /*没有写高度，由内容撑起来*/
+    .box2{flex:1; }
+    .box3{width: 100px;}
+  }
+  @media screen and (min-width:800px) and (max-width:1100px){ /*二栏布局*/
+    .box1{width: 100px;}
+    .box2{flex:1; }
+    .box3{width: 100%;}
+  }
+  @media screen and (max-width:800px) { /*一栏布局*/
+    .box1,.box2,.box3{width: 100%;}
+  }
+</style>
