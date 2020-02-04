@@ -18,7 +18,7 @@
                             </div>
                             <!--添加面包屑 -->
                             <Breadcrumb>
-                                <BreadcrumbItem v-for="(item,index) in routerPath" :key="index" :to = "`${item.path}`">{{item.name}}</BreadcrumbItem>
+                                <BreadcrumbItem v-for="(item,index) in routerPath" :key="index" :to = "`${item.path}`">{{item.meta.title}}</BreadcrumbItem>
                             </Breadcrumb>
                         </div>
                     </Header>
@@ -32,7 +32,6 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
     export default {
         name: 'dashboard',
         data(){
@@ -48,9 +47,9 @@
                         name: '关于页',
                     }
                 ],
-                contentExample: (document.documentElement.clientHeight - 104) + 'px',
-                fullHeight: document.documentElement.clientHeight, // 设备高度
-                fullWidth:  document.documentElement.clientWidth,  // 设备宽度
+                contentExample: (this.$store.state.module2.setFullHeight.fullHeight - 104) + 'px',
+                fullHeight: this.$store.state.module2.setFullHeight.fullHeight, // 设备高度
+                fullWidth:  this.$store.state.module2.setFullWidth.fullWidth,  // 设备宽度
                 routerPath: []  // 面包屑路径容器
             }
         },
@@ -81,7 +80,6 @@
             }
         },
         computed: {
-            ...mapGetters(['getMenuList']),
             rotateIcon () {
                 return [
                     'menu-icon',
@@ -97,7 +95,7 @@
         },
         mounted(){  // 刷新时
             const that = this
-            that.routerPath = that.$route.matched,
+            that.routerPath = that.$route.matched
                 // 注：window.onresize只能在项目内触发1次
             window.onresize = () => {
                 return (() => {
@@ -112,6 +110,12 @@
                     } else {
                         that.isCollapsed
                     }
+                    this.$store.commit("setFullHeight", {
+                        fullHeight: that.fullHeight, // 设备高度
+                    });
+                    this.$store.commit("setFullWidth", {
+                        fullWidth: that.fullWidth,  // 设备宽度
+                    });
                 })()
             }
         },
