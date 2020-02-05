@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import './mock'
 
 // 引入 ViewUI 框架
 import ViewUI from 'view-design';

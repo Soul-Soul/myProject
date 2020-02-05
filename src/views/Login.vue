@@ -47,51 +47,7 @@
                 ruleForm: {
                     username: [{required: true,message: '请输入密码', trigger: 'blur'}],
                     password: [{required: true, message: '请输入验证码', trigger: 'blur'}]
-                },
-                fullHeight: document.documentElement.clientHeight, // 设备高度
-                fullWidth:  document.documentElement.clientWidth,  // 设备宽度
-            }
-        },
-        watch:{
-            fullHeight (val) { // 增加定时器会避免频繁调用window.onresize方法
-                if(!this.timer) {
-                    this.fullHeight = val
-                    this.timer = true
-                    let that = this
-                    setTimeout(function (){
-                        that.timer = false
-                    },400)
                 }
-            },
-            fullWidth (val) { // 增加定时器会避免频繁调用window.onresize方法
-                if(!this.timer) {
-                    this.fullWidth = val
-                    this.timer = true
-                    let that = this
-                    setTimeout(function (){
-                        that.timer = false
-                    },400)
-                }
-            }
-        },
-        mounted(){  // 刷新时
-            const that = this
-            // 注：window.onresize只能在项目内触发1次
-            window.onresize = () => {
-                return (() => {
-                    // 通过捕获系统的onresize事件触发我们需要执行的事件
-                    window.fullHeight = document.documentElement.clientHeight
-                    window.fullWidth = document.documentElement.clientWidth
-                    that.fullHeight = window.fullHeight
-                    that.fullWidth = window.fullWidth
-                    console.log(that.fullWidth,that.fullHeight,'mount')
-                    this.$store.commit("setFullHeight", {
-                        fullHeight: that.fullHeight, // 设备高度
-                    });
-                    this.$store.commit("setFullWidth", {
-                        fullWidth: that.fullWidth,  // 设备宽度
-                    });
-                })()
             }
         },
         methods:{

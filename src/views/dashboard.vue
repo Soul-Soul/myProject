@@ -47,9 +47,9 @@
                         name: '关于页',
                     }
                 ],
-                contentExample: (this.$store.state.module2.setFullHeight.fullHeight - 104) + 'px',
-                fullHeight: this.$store.state.module2.setFullHeight.fullHeight, // 设备高度
-                fullWidth:  this.$store.state.module2.setFullWidth.fullWidth,  // 设备宽度
+                contentExample: (document.documentElement.clientHeight - 104) + 'px', // 内容高度
+                fullHeight: document.documentElement.clientHeight, // 设备高度
+                fullWidth:  document.documentElement.clientWidth,  // 设备宽度
                 routerPath: []  // 面包屑路径容器
             }
         },
@@ -96,7 +96,7 @@
         mounted(){  // 刷新时
             const that = this
             that.routerPath = that.$route.matched
-                // 注：window.onresize只能在项目内触发1次
+            // 注：window.onresize只能在项目内触发1次
             window.onresize = () => {
                 return (() => {
                     // 通过捕获系统的onresize事件触发我们需要执行的事件
@@ -108,7 +108,7 @@
                     if(that.fullWidth < 600){
                         that.isCollapsed = true
                     } else {
-                        that.isCollapsed
+                        that.isCollapsed = false
                     }
                     this.$store.commit("setFullHeight", {
                         fullHeight: that.fullHeight, // 设备高度
