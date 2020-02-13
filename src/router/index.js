@@ -1,27 +1,37 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import dashboard from '../views/dashboard'
 
 Vue.use(VueRouter)
 
 const routes = [
-    {
-        path: '/',
-        name: 'dashboard',
-        component: dashboard,
-        children:[
-            {
-                path: 'home',
-                name: 'home',
-                component: () => import('../views/dashboard/Home.vue')
-            },
-            {
-                path: '/about',
-                name: 'about',
-                component: () => import('../views/dashboard/About.vue')
-            }
-        ]
-    },
+  {
+      path: '/',
+      name: 'login',
+      component: () => import ('../views/Login')
+  },
+  {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: () => import ('../views/dashboard'),
+      meta:{title: '首页',icon: 'ios-home'},
+      children: [
+          {
+              path: '/home',
+              name: 'home',
+              component:() => import('../views/home'),
+              meta:{title: '主页', icon: 'ios-home'},
+              children:[]
+          },
+          {
+              path: '/about',
+              name: 'about',
+              component: () => import( '../views/about'),
+              meta:{title: '关于页', icon: 'ios-navigate'},
+              children:[]
+          }
+      ],
+      directive: '/login'
+  }
 ]
 
 const router = new VueRouter({
