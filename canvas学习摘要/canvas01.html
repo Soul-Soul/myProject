@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>canvas元素</title>
+    <style type="text/css">
+        /* 外联样式 */
+        .CT{
+            display: flex;
+            justify-content: space-between;
+            margin: 40px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<canvas id="clock">默认是 300 * 150 </canvas>
+<canvas id="pathThree" width="400" height="200">设置400 * 200</canvas>
+<canvas id="circleTwo"></canvas>
+<div class="CT">
+    <canvas id="qdCT" width="500" height="400">二次贝塞尔曲线</canvas>
+    <canvas id="bzCT" width="500" height="400">三次贝塞尔曲线</canvas>
+</div>
+<canvas id="gameC" width="500" height="400"></canvas>
+
+<script>
+    function draw() {
+        let canvas1 = document.getElementById('clock')
+        if(canvas1.getContext){
+            let ctx = canvas1.getContext("2d")
+            ctx.strokeRect(0,0,300,150)
+            for(let i = 0; i <= 75;){
+                i = i + 5
+                ctx.fillRect(i,i,300 - i*2,150 - i*2)
+                i = i + 5
+                ctx.clearRect(i,i,300 - i*2,150 - i*2)
+            }
+            ctx.strokeRect(140,70,10,10)
+        }
+    }
+    draw(); // 调用函数 三个函数运用clearRect(清除) fillRect(填充) strokeRect(描边轮廓)
+    function pathThree() {
+        let canvas2 = document.getElementById("pathThree")
+        if(canvas2.getContext){
+            let ctx = canvas2.getContext("2d")
+            ctx.strokeRect(0,0,400,200)
+            // 实例1
+            ctx.beginPath()
+            ctx.moveTo(50,50)
+            ctx.lineTo(50,200)
+            ctx.lineTo(250,200)
+            ctx.fill()
+            // 实例2
+            ctx.beginPath()
+            ctx.moveTo(200,50)
+            ctx.lineTo(200,100)
+            ctx.lineTo(250,75)
+            ctx.fill()
+            //实例3
+            ctx.beginPath()
+            ctx.moveTo(300,50)
+            ctx.lineTo(300,100)
+            ctx.lineTo(350,75)
+            ctx.lineTo(300,50) // 任选一个
+            // ctx.closePath();
+            ctx.stroke();
+        }
+    }
+    /*    调用函数 beginPath()开始路径  moveTo(x,y)起始位置  lineTo(x,y)链接到节点
+    fill()填充位置  stroke()绘制边框 */
+    pathThree();
+
+    function circleTwo(x,y,r,mr){
+        let canvas3 = document.getElementById("circleTwo")
+        if(canvas3.getContext){
+            let ctx = canvas3.getContext("2d")
+            ctx.strokeRect(0,0,300,150)
+            // 实例1
+            ctx.beginPath()
+            ctx.moveTo(x, y)
+            let beginAngle =(Math.PI/180)*0
+            let endAngel = (Math.PI/180)*(90)
+            ctx.arc(x, y, r, beginAngle, endAngel, false)
+            ctx.lineTo(x, y)
+            ctx.stroke()
+            // 实例2
+            ctx.beginPath()
+            ctx.moveTo(x - 10, y)
+            ctx.arc(x - 10, y, r, (Math.PI/180)*90, (Math.PI/180)*180, false)
+            ctx.lineTo(x - 10, y)
+            ctx.stroke()
+            // 实例3
+            ctx.beginPath()
+            ctx.moveTo(x - 10, y - 10)
+            ctx.arc(x - 10, y - 10, r, (Math.PI/180)*180, (Math.PI/180)*270, false)
+            ctx.lineTo(x - 10, y - 10)
+            ctx.stroke()
+            // 实例4
+            ctx.beginPath()
+            ctx.moveTo(x, y - 10)
+            ctx.arc(x, y - 10, r, (Math.PI/180)*270, (Math.PI/180)*360, false)
+            ctx.lineTo(x, y - 10)
+            ctx.stroke()
+            // 实例5
+            ctx.beginPath()
+            ctx.arc(x - 5, y - 5, mr, 0, (Math.PI/180)*360, false)
+            ctx.stroke()
+        }
+    }
+    circleTwo(100,75,50,5); circleTwo(75,50,10,2);circleTwo(125,50,10,2); circleTwo(125,100,10,2);circleTwo(75,100,10,2)
+    circleTwo(220,75,50,5); circleTwo(195,50,10,2);circleTwo(245,50,10,2);circleTwo(245,100,10,2);circleTwo(195,100,10,2)
+
+    // 二次贝塞尔曲线
+    function qdCT() {
+        let canvas4 = document.getElementById("qdCT")
+        if(canvas4.getContext){
+            let ctx =canvas4.getContext("2d")
+            ctx.strokeRect(0,0,500,400)
+            // 曲线1
+            ctx.beginPath()
+            ctx.moveTo(0,0)
+            ctx.quadraticCurveTo(500,0,500,200)
+            ctx.stroke()
+            // 曲线2
+            ctx.beginPath()
+            ctx.moveTo(500,400)
+            ctx.quadraticCurveTo(0,400,0,200)
+            // ctx.lineTo(0,0)
+            ctx.stroke()
+            // 曲线3
+            ctx.beginPath()
+            ctx.moveTo(0,400)
+            ctx.quadraticCurveTo(500,400,500,200)
+            // ctx.lineTo(0,0)
+            ctx.stroke()
+            // 曲线4
+            ctx.beginPath()
+            ctx.moveTo(500,0)
+            ctx.quadraticCurveTo(0,0,0,200)
+            // ctx.lineTo(0,0)
+            ctx.stroke()
+
+        }
+    }
+    qdCT()
+    // 三次贝塞尔曲线
+    function bzCT() {
+        let canvas5 = document.getElementById("bzCT")
+        if(canvas5.getContext){
+            let ctx =canvas5.getContext("2d")
+            ctx.strokeRect(0,0,500,400)
+            //三次贝塞尔曲线
+            // 实例1：心形
+            ctx.beginPath();
+            ctx.moveTo(75,40);
+            ctx.bezierCurveTo(75,37,70,25,50,25);
+            ctx.bezierCurveTo(20,25,20,62.5,20,62.5);
+            ctx.bezierCurveTo(20,80,40,102,75,120);
+            ctx.bezierCurveTo(110,102,130,80,130,62.5);
+            ctx.bezierCurveTo(130,62.5,130,25,100,25);
+            ctx.bezierCurveTo(85,25,75,37,75,40);
+            ctx.stroke();
+
+            // 实例2
+            roundedRect(ctx,175,20,150,100,15)
+        }
+    }
+    bzCT()
+
+    // 封装的一个用于绘制圆角矩形的函数.
+    function roundedRect(ctx,x,y,width,height,radius){
+        ctx.beginPath();
+        ctx.moveTo(x,y+radius);
+        ctx.lineTo(x,y+height-radius);
+        ctx.quadraticCurveTo(x,y+height,x+radius,y+height);
+        ctx.lineTo(x+width-radius,y+height);
+        ctx.quadraticCurveTo(x+width,y+height,x+width,y+height-radius);
+        ctx.lineTo(x+width,y+radius);
+        ctx.quadraticCurveTo(x+width,y,x+width-radius,y);
+        ctx.lineTo(x+radius,y);
+        ctx.quadraticCurveTo(x,y,x,y+radius);
+        ctx.stroke();
+    }
+
+    function gameC() {
+        var canvas = document.getElementById('gameC');
+        if (canvas.getContext){
+            let ctx = canvas.getContext('2d');
+            ctx.strokeRect(0,0,500,400)
+            roundedRect(ctx,12,12,150,150,15);
+            roundedRect(ctx,19,19,150,150,9);
+            roundedRect(ctx,53,53,49,33,10);
+            roundedRect(ctx,53,119,49,16,6);
+            roundedRect(ctx,135,53,49,33,10);
+            roundedRect(ctx,135,119,25,49,10);
+
+            ctx.beginPath();
+            ctx.arc(37,37,13,Math.PI/7,-Math.PI/7,false);
+            ctx.lineTo(31,37);
+            ctx.fill();
+
+            for(var i=0;i<8;i++){
+                ctx.fillRect(51+i*16,35,4,4);
+            }
+
+            for(i=0;i<6;i++){
+                ctx.fillRect(115,51+i*16,4,4);
+            }
+
+            for(i=0;i<8;i++){
+                ctx.fillRect(51+i*16,99,4,4);
+            }
+
+            ctx.beginPath();
+            ctx.moveTo(83,116);
+            ctx.lineTo(83,102);
+            ctx.bezierCurveTo(83,94,89,88,97,88);
+            ctx.bezierCurveTo(105,88,111,94,111,102);
+            ctx.lineTo(111,116);
+            ctx.lineTo(106.333,111.333);
+            ctx.lineTo(101.666,116);
+            ctx.lineTo(97,111.333);
+            ctx.lineTo(92.333,116);
+            ctx.lineTo(87.666,111.333);
+            ctx.lineTo(83,116);
+            ctx.fill();
+
+            ctx.fillStyle = "white";
+            ctx.beginPath();
+            ctx.moveTo(91,96);
+            ctx.bezierCurveTo(88,96,87,99,87,101);
+            ctx.bezierCurveTo(87,103,88,106,91,106);
+            ctx.bezierCurveTo(94,106,95,103,95,101);
+            ctx.bezierCurveTo(95,99,94,96,91,96);
+            ctx.moveTo(103,96);
+            ctx.bezierCurveTo(100,96,99,99,99,101);
+            ctx.bezierCurveTo(99,103,100,106,103,106);
+            ctx.bezierCurveTo(106,106,107,103,107,101);
+            ctx.bezierCurveTo(107,99,106,96,103,96);
+            ctx.fill();
+
+            ctx.fillStyle = "black";
+            ctx.beginPath();
+            ctx.arc(101,102,2,0,Math.PI*2,true);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(89,102,2,0,Math.PI*2,true);
+            ctx.fill();
+        }
+    }
+    gameC()
+</script>
+</body>
+</html>
