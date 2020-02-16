@@ -1,0 +1,62 @@
+一、使用样式和颜色
+	1、ctx.fillStyle = color              设置图形的填充颜色。
+	2、ctx.strokeStyle = color        设置图形轮廓的颜色。
+	3、ctx.globalAlpha = 0.2;         // 设置透明度值。
+
+
+二、线型 Line styles
+	1、lineWidth = value	设置线条宽度。	 ctx.lineWidth = 1+i;	边缘正好落在像素边界（3.5,1）
+	2、lineCap = type		设置线条末端样式。（butt，round 、 square（等宽且高度为一半线宽的方块））。默认是 butt。
+	3、lineJoin = type		设定线条与线条间接合处的样式。（round, bevel 和 miter）。默认是 miter。
+	4、miterLimit = value	 限制当两条线相交时交接处最大长度；所谓交接处长度（斜接长度）是指线条交接处内角顶点到外角顶点的长度。
+	5、getLineDash()		返回一个包含当前虚线样式，长度为非负偶数的数组。
+	6、setLineDash(segments)	设置当前虚线样式。
+	7、lineDashOffset = value	设置虚线样式的起始偏移量。
+
+三、渐变 Gradients
+
+1、createLinearGradient(x1, y1, x2, y2)：	 方法接受 4 个参数，表示渐变的起点 (x1,y1) 与终点 (x2,y2)。
+
+2、createRadialGradient(x1, y1, r1, x2, y2, r2)：	方法接受 6 个参数，前三个定义一个以 (x1,y1) 为原点，半径为 r1 的圆，后三个参数则定义另一个以 (x2,y2) 为原点，半径为 r2 的圆。
+	var lineargradient = ctx.createLinearGradient(0,0,150,150);
+	var radialgradient = ctx.createRadialGradient(75,75,0,75,75,100);
+创建出 canvasGradient 对象后，我们就可以用 addColorStop 方法给它上色了。
+
+3、gradient.addColorStop(position, color)
+	position 参数必须是一个 0.0 与 1.0 之间的数值，表示渐变中颜色所在的相对位置；color 参数必须是一个有效的 CSS 颜色值（如 #FFF， rgba(0,0,0,1)，等等）
+         eg:
+	var lineargradient = ctx.createLinearGradient(0,0,150,150);
+	lineargradient.addColorStop(0,'white');
+	lineargradient.addColorStop(1,'black');
+
+
+4、图案样式 Patterns
+createPattern(image, type)
+该方法接受两个参数。Image 可以是一个 Image 对象的引用，或者另一个 canvas 对象。Type 必须是下面的字符串值之一：repeat，repeat-x，repeat-y 和 no-repeat。
+          eg： var img = new Image();
+	  img.src = 'someimage.png';
+	  var ptrn = ctx.createPattern(img,'repeat');
+
+5、阴影 Shadows
+1、shadowOffsetX = float	shadowOffsetY = float
+	shadowOffsetX 和 shadowOffsetY 用来设定阴影在 X 和 Y 轴的延伸距离，它们是不受变换矩阵所影响的。负值表示阴影会往上或左延伸，正值则表示会往下或右延伸，它们默认都为 0。
+2、shadowBlur = float	shadowBlur 用于设定阴影的模糊程度，其数值并不跟像素数量挂钩，也不受变换矩阵的影响，默认为 0。
+3、shadowColor = color	是标准的 CSS 颜色值，用于设定阴影颜色效果，默认是全透明的黑色。
+
+	eg：文字阴影的例子
+
+function draw() {
+  var ctx = document.getElementById('canvas').getContext('2d');
+
+  ctx.shadowOffsetX = 2;
+  ctx.shadowOffsetY = 2;
+  ctx.shadowBlur = 2;
+  ctx.shadowColor = "rgba(0, 0, 0, 0.5)";
+ 
+  ctx.font = "20px Times New Roman";
+  ctx.fillStyle = "Black";
+  ctx.fillText("Sample String", 5, 30);
+}
+6、Canvas 填充规则
+ 	"nonzero": non-zero winding rule, 默认值.
+ 	"evenodd":  even-odd winding rule.

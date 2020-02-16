@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>canvas变形</title>
+    <style type="text/css">
+
+    </style>
+</head>
+<body>
+<canvas id="TF"></canvas>
+<canvas id="TS"></canvas>
+<canvas id="RT" width="450" height="450"></canvas>
+<canvas id="SH" width="450" height="450"></canvas>
+<canvas id="GCO" width="450" height="450"></canvas>
+<canvas id="star" width="450" height="450"></canvas>
+
+<script type="application/javascript">
+    function TF() {
+        let canvas1 = document.getElementById("TF")
+        if(canvas1.getContext){
+            let ctx = canvas1.getContext("2d")
+            ctx.strokeRect(0,0,300,150)
+            ctx.fillStyle = "black"
+            ctx.fillRect(75,0,150,150)
+            ctx.save() //第一次保存
+            ctx.fillStyle = "blue"
+            ctx.fillRect(90,15,120,120)
+            ctx.save() //第二次保存
+            ctx.fillStyle = "white"
+            ctx.globalAlpha = 0.5
+            ctx.fillRect(105,30,90,90)
+            //  返回上一次保存的配置
+            ctx.restore()
+            ctx.fillRect(120,45,60,60)
+            //  返回上上一次保存的配置
+            ctx.restore()
+            ctx.fillRect(135,60,30,30)
+        }
+    }
+    TF()
+    function TS() {
+        let canvas2 = document.getElementById("TS")
+        if(canvas2.getContext){
+            let ctx = canvas2.getContext("2d")
+            ctx.strokeRect(0,0,300,150)
+            for(let i = 0; i < 3; i++){
+                for(let j = 0; j < 3; j++){
+                    ctx.save()
+                    ctx.fillStyle = 'rgba(' + 51*i + ','+ (255 - 51*i)  + ',255)'
+                    ctx.translate(10 + j * 110,10 + i*50)
+                    ctx.fillRect(0,0,50,25)
+                    ctx.restore()
+                }
+            }
+        }
+    }
+    TS()
+    function RT() {
+        let canvas3 = document.getElementById("RT")
+        if(canvas3.getContext){
+            let ctx = canvas3.getContext("2d")
+            ctx.strokeRect(0,0,450,450)
+            ctx.translate(225,225)
+            ctx.save()
+           for(let j = 0; j <= 2; j++){
+                switch (j){
+                    case 0:
+                        let cicle1 = ctx.createRadialGradient(130 - j * 35,130 - j * 35,10,130 - j * 35,130 - j * 35,20)
+                        cicle1.addColorStop(0,"pink")
+                        cicle1.addColorStop(0.5,"#FF0188")
+                        cicle1.addColorStop(1,"rgba(255,1,136,0)")
+                        ctx.fillStyle = cicle1
+                        ctx.fillRect(110 - j * 35,110 - j * 35,40,40)
+                        break
+                    case 1:
+                        let cicle2 = ctx.createRadialGradient(130 - j * 35,130 - j * 35,10,130 - j * 35,130 - j * 35,20)
+                        cicle2.addColorStop(0,'#F4F201')
+                        cicle2.addColorStop(0.8,'#E4C700')
+                        cicle2.addColorStop(1,'rgba(228,199,0,0)')
+                        ctx.fillStyle = cicle2
+                        break
+                    case 2:
+                        let cicle3 = ctx.createRadialGradient(130 - j * 35,130 - j * 35,10,130 - j * 35,130 - j * 35,20)
+                        cicle3.addColorStop(0,'#A7D30C')
+                        cicle3.addColorStop(0.9,'#019F62')
+                        cicle3.addColorStop(1,'rgba(1,159,98,0)')
+                        ctx.fillStyle = cicle3
+                        break
+                }
+               for(let i = 0;i < (18/(j+1)); i ++){
+                      ctx.save()
+                      ctx.rotate((Math.PI/180)*20*i*(j+1))
+                      ctx.fillRect(110 - j * 35,110 - j * 35,40,40)
+                      ctx.restore()
+               }
+           }
+            let cicle4 =ctx.createRadialGradient(0,0,10,0,0,40)
+            cicle4.addColorStop(0,'#00C9FF')
+            cicle4.addColorStop(0.8,'#00B5E2')
+            cicle4.addColorStop(1,'rgba(0,201,255,0)')
+            ctx.fillStyle = cicle4
+            ctx.fillRect(-40,-40,80,80)
+        }
+    }
+    RT()
+    function SH() {
+        let ctx = document.getElementById('SH').getContext('2d');
+        ctx.strokeRect(0,0,450,450)
+        ctx.translate(225,225);
+
+        for (let i=1;i<6;i++){ // Loop through rings (from inside to out)
+            ctx.save();
+            ctx.fillStyle = 'rgb('+(51*i)+','+(255-51*i)+',255)';
+
+            for (let j=0;j<i*6;j++){ // draw individual dots
+                ctx.rotate(Math.PI*2/(i*6));
+                ctx.beginPath();
+                ctx.arc(0,i*40,(i+2),0,Math.PI*2,true);
+                ctx.fill();
+            }
+
+            ctx.restore();
+        }
+    }
+    SH()
+    function GCO() {
+        let canvas =document.getElementById("GCO")
+        let ctx = canvas.getContext("2d")
+    //    glabalCompositeOperation = type
+        /*
+        * source-over(默认) destination-over（取反）
+        *source-in          destination-in
+        * source-out        destination-out
+        * source-atop       destination-atop
+        * lighter           darker
+        * xor               copy
+        * */
+        ctx.strokeRect(0,0,450,450)
+        ctx.save()
+        ctx.fillStyle = 'red'
+        ctx.fillRect(50,50,100,100)
+        ctx.save()
+        ctx.globalCompositeOperation = 'source-atop'
+        ctx.fillStyle = 'blue'
+        ctx.fillRect(100,100,100,100)
+        ctx.save()
+        ctx.restore()
+        ctx.globalCompositeOperation = 'source-over'
+        ctx.fillRect(150,150,100,100)
+        ctx.restore()
+        ctx.globalCompositeOperation = 'xor'
+        ctx.fillRect(200,200,100,100)
+        ctx.save()
+        ctx.globalCompositeOperation = 'xor'
+        ctx.arc(250,250,50,0,(Math.PI/180)*360,false)
+        ctx.fill()
+
+    }
+    GCO()
+
+    function star() {
+        let ctx = document.getElementById('star').getContext('2d');
+        ctx.strokeRect(0,0,450,450)
+        ctx.fillRect(0,0,400,400);
+        ctx.translate(200,200);
+
+        // Create a circular clipping path
+        ctx.beginPath();
+        ctx.arc(0,0,200,0,Math.PI*2,true);
+        ctx.clip();
+
+        // star background
+        let lingrad = ctx.createLinearGradient(0,-200,0,200);
+        lingrad.addColorStop(0, '#232256');
+        lingrad.addColorStop(1, '#143778');
+
+        ctx.fillStyle = lingrad;
+        ctx.fillRect(-200,-200,400,400);
+
+        // star stars
+        for (let j=1;j<50;j++){
+            ctx.save();
+            ctx.fillStyle = '#fff';
+            ctx.translate(150-Math.floor(Math.random()*300),
+                150-Math.floor(Math.random()*300));
+            drawStar(ctx,Math.floor(Math.random()*4)+2);
+            ctx.restore();
+        }
+
+    }
+    star()
+    function drawStar(ctx,r){
+        ctx.save();
+        ctx.beginPath()
+        ctx.moveTo(r,0);
+        for (let i=0;i<9;i++){
+            ctx.rotate(Math.PI/5);
+            if(i%2 === 0) {
+                ctx.lineTo((r/0.525731)*0.200811,0);
+            } else {
+                ctx.lineTo(r,0);
+            }
+        }
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+    }
+</script>
+</body>
+</html>

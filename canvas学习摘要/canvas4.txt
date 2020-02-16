@@ -1,0 +1,69 @@
+				变形 Transformations
+
+一、状态的保存和恢复 Saving and restoring state
+	1、save()		保存画布(canvas)的所有状态
+	2、restore()	save 和 restore 方法是用来保存和恢复 canvas 状态的，都没有参数。Canvas 的状态就是当前画面应用的所有样式和变形的一个快照。
+
+	3、Canvas状态存储在栈中，每当save()方法被调用后，当前的状态就被推送到栈中保存。一个绘画状态包括：
+
+	当前应用的变形（即移动，旋转和缩放，见下）：
+	strokeStyle, fillStyle, globalAlpha, lineWidth, lineCap, lineJoin, miterLimit, shadowOffsetX, 		shadowOffsetY, shadowBlur, shadowColor, globalCompositeOperation 的值。
+	当前的裁切路径（clipping path）
+
+二、移动 Translating
+translate(x, y) 	 方法接受两个参数。x 是左右偏移量，y 是上下偏移量。
+	如果你是在一个循环中做位移但没有保存和恢复 canvas 的状态，很可能到最后会发现怎么有些东西不见了，那是因为它很可能已经超出 canvas 范围以外了。
+
+三、旋转 Rotating
+rotate(angle)
+	1、这个方法只接受一个参数：旋转的角度(angle)，它是顺时针方向的，以弧度为单位的值。
+	2、旋转的中心点始终是 canvas 的原点，如果要改变它，我们需要用到 translate 方法。
+
+四、缩放 Scaling
+接着是缩放。我们用它来增减图形在 canvas 中的像素数目，对形状，位图进行缩小或者放大。
+
+scale(x, y)
+scale  方法可以缩放画布的水平和垂直的单位。两个参数都是实数，可以为负数，x 为水平缩放因子，y 为垂直缩放因子，如果比1小，会比缩放图形， 如果比1大会放大图形。默认值为1， 为实际大小。
+
+五、变形 Transforms
+最后一个方法允许对变形矩阵直接修改。
+
+resetTransform()
+
+重置当前变形为单位矩阵，它和调用以下语句是一样的：
+
+ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+transform(m11, m12, m21, m22, dx, dy)
+这个方法是将当前的变形矩阵乘上一个基于自身参数的矩阵，在这里我们用下面的矩阵：
+
+m11 m21 dx
+m12 m22 dy
+0 	0 	1
+如果任意一个参数是无限大，变形矩阵也必须被标记为无限大，否则会抛出异常。
+
+这个函数的参数各自代表如下：
+
+m11：水平方向的缩放
+
+m12：水平方向的倾斜偏移
+
+m21：竖直方向的倾斜偏移
+
+m22：竖直方向的缩放
+
+dx：水平方向的移动
+
+dy：竖直方向的移动
+
+				组合 Compositing
+
+一、globalCompositeOperation = type
+	这个属性设定了在画新图形时采用的遮盖策略，其值是一个标识12种遮盖方式的字符串。
+
+source-over 、destination-over、source-in、destination-in、source-out、destination-out、source-atop、destination-atop、lighter、darker 、xor、copy
+
+
+二、clip()
+将当前正在构建的路径转换为当前的裁剪路径。
+

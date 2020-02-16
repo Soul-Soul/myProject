@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>canvasStyle</title>
+    <style type="text/css">
+
+    </style>
+</head>
+<body>
+<canvas id="CVColor" width="450" height="450"></canvas>
+<canvas id="CVO" width="450" height="450"></canvas>
+<canvas id="RadioSH" width="450" height="450"></canvas>
+<canvas id="FT" width="450" height="450"></canvas>
+<div>
+    <img id="FTP" src="imgs/cicle.png" alt="球型图片">
+    <img id="TXT" src="imgs/text.png" alt="文字图片">
+</div>
+<div style="margin-top: 20px;display: flex;justify-content: flex-start;flex-flow: wrap">
+    <canvas id="imgSP" width="400" height="300"></canvas>
+    <canvas id="imgSC" width="450" height="450"></canvas>
+</div>
+
+<script type="application/javascript">
+    function CVcolor() {
+        let canvas1 = document.getElementById("CVColor")
+        if (canvas1.getContext){
+            let ctx  = canvas1.getContext("2d")
+            ctx.strokeRect(0,0,450,450)
+            for (let i=0;i<6;i++){
+                for (let j=0;j<6;j++){
+                    ctx.strokeStyle = 'rgb(0,' + Math.floor(255-42.5*i) + ',' +
+                        Math.floor(255-42.5*j) + ')';
+                    ctx.beginPath();
+                    ctx.arc(12.5+j*25,12.5+i*25,10,0,Math.PI*2,true);
+                    ctx.stroke();
+                }
+            }
+            for (let i=6;i<12;i++){
+                for (let j=6;j<12;j++){
+                    ctx.fillStyle = 'rgb(' + Math.floor(255-42.5*(i-6)) + ',' +
+                        Math.floor(255-42.5*(j-6)) + ',0)';
+                    ctx.fillRect(j*25,i*25,25,25);
+                }
+            }
+            for (let i=12;i<18;i++){
+                for (let j=12;j<18;j++){
+                    ctx.strokeStyle = 'rgb(0,' + Math.floor(255-42.5*(i-12)) + ',' +
+                        Math.floor(255-42.5*(j-12)) + ')';
+                    ctx.beginPath();
+                    ctx.arc(12.5+j*25,12.5+i*25,10,0,Math.PI*2,true);
+                    ctx.stroke();
+                }
+            }
+
+        }
+    }
+    CVcolor()
+    function CVO(){
+        let canvas2 = document.getElementById("CVO")
+        if(canvas2.getContext){
+            let ctx = canvas2.getContext("2d")
+            ctx.strokeRect(0,0,450,450)
+            ctx.fillStyle = "yellow"
+            ctx.fillRect(125,125,100,100)
+            ctx.fillStyle = "green"
+            ctx.fillRect(225,125,100,100)
+            ctx.fillStyle = "blue"
+            ctx.fillRect(125,225,100,100)
+            ctx.fillStyle = "red"
+            ctx.fillRect(225,225,100,100)
+            ctx.fillStyle = "#FFF"
+
+            // 设置透明度值
+            ctx.globalAlpha = 0.2;
+
+            for(let i = 0; i < 7; i++){
+                ctx.beginPath()
+                ctx.arc(225,225,12.5 * (i + 1),0,(Math.PI/180) * 360,false)
+                ctx.fill()
+            }
+        }
+    }
+    CVO()
+    function RadioSH() {
+        let canvas3 = document.getElementById("RadioSH")
+        if (canvas3.getContext){
+            let ctx = canvas3.getContext("2d")
+            ctx.strokeRect(0,0,450,450)
+
+           let cicle1 = ctx.createRadialGradient(100,100,30,100,100,80)
+            cicle1.addColorStop(0,'#A7D30C')
+            cicle1.addColorStop(0.9,'#019F62')
+            cicle1.addColorStop(1,'rgba(1,159,98,0)')
+            let cicle2 = ctx.createRadialGradient(350,120,15,350,120,40)
+            cicle2.addColorStop(0,'#FF5F98')
+            cicle2.addColorStop(0.5,'#FF0188')
+            cicle2.addColorStop(1, 'rgba(255,1,136,0)');
+            let cicle3 =ctx.createRadialGradient(180,250,50,180,300,100)
+            cicle3.addColorStop(0,'#00C9FF')
+            cicle3.addColorStop(0.8,'#00B5E2')
+            cicle3.addColorStop(1,'rgba(0,201,255,0)')
+            let cicle4 =ctx.createRadialGradient(450,450,20,450,450,250)
+            cicle4.addColorStop(0,'#F4F201')
+            cicle4.addColorStop(0.8,'#E4C700')
+            cicle4.addColorStop(1,'rgba(228,199,0,0)')
+            ctx.fillStyle = cicle4
+            ctx.fillRect(200,200,250,250)
+            ctx.fillStyle = cicle3
+            ctx.fillRect(80,200,250,250)
+            ctx.fillStyle = cicle2
+            ctx.fillRect(310,80,80,80)
+            ctx.fillStyle = cicle1
+            ctx.fillRect(20,20,160,160)
+        }
+    }
+    RadioSH()
+    function FT(){
+        let canvas4 = document.getElementById("FT")
+        if(canvas4.getContext){
+            let ctx =canvas4.getContext("2d")
+            ctx.strokeRect(0,0,450,450)
+            ctx.font = "30px serif";
+            ctx.textBaseline = "alphabetic"
+            let text1 = ctx.measureText("不是貂蝉，胜似貂蝉")
+
+            ctx.fillText("不是貂蝉，胜似貂蝉",(450 - text1.width)/2,50)
+            console.log((450 - text1.width)/2,50)
+            let text2 = ctx.measureText("Hello,Beauty")
+            ctx.direction = "ltr"
+            ctx.fillText("Hello,Beauty",(450 - text2.width)/2,100)
+            ctx.strokeText("Hello,Beauty",(450 - text2.width)/2,150)
+        }
+    }
+    FT()
+    function imgSP() {
+        let ctx = document.getElementById("imgSP").getContext("2d")
+        ctx.strokeRect(0,0,400,300)
+        let img = new Image();
+        img.onload = function(){
+            ctx.drawImage(img,10,10);
+        }
+        img.src = 'imgs/backdrop.png';
+    }
+    imgSP()
+    function imgSC(){
+        let canvas5 = document.getElementById("imgSC")
+        if(canvas5.getContext){
+            let ctx = canvas5.getContext("2d")
+            ctx.strokeRect(0,0,450,450)
+            ctx.drawImage(document.getElementById("FTP"),0,0)
+            ctx.drawImage(document.getElementById("TXT"),15,15,420,150,0,150,450,150)
+        }
+    }
+    setTimeout(() => {
+        imgSC()
+    },4000)
+</script>
+</body>
+</html>
