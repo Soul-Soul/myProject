@@ -45,6 +45,10 @@
                     {
                         path: '/about',
                         name: '关于页',
+                    },
+                    {
+                        path: '/selectList',
+                        name: '选择框',
                     }
                 ],
                 contentExample: (document.documentElement.clientHeight - 104) + 'px', // 内容高度

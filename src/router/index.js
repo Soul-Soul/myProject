@@ -28,6 +28,12 @@ const routes = [
               component: () => import( '../views/about'),
               meta:{title: '关于页', icon: 'ios-navigate'},
               children:[]
+          }, {
+              path: '/select',
+              name: 'select',
+              component: () => import( '../views/selectList'),
+              meta:{title: '选择框', icon: 'ios-navigate'},
+              children:[]
           }
       ],
       directive: '/login'
