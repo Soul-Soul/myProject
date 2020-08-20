@@ -1,7 +1,10 @@
 <template>
   <div>
     <treeselect ref="tree" v-model="value" @input="inputChange" :multiple="true" :options="options" :min-height="60" />
-    <LiquidFill></LiquidFill>
+    <div style="display: flex;justify-content: space-between;align-items: center">
+      <div id="main" style="width: 600px;height:400px;"></div>
+      <LiquidFill></LiquidFill>
+    </div>
   </div>
 </template>
 
@@ -71,7 +74,102 @@
                 return this.datalist
             }
         },
+        mounted(){
+            this.drawLine();
+        },
         methods:{
+            drawLine(){
+                let myChart = this.$echarts.init(document.getElementById("main"));
+                let option = {
+                    title: {
+                        text: '折线图堆叠'
+                    },
+                    tooltip: {
+                        trigger: "axis",
+                        axisPointer: {
+                            // link: null,
+                            animation: true,
+                            type: 'cross'
+                        },
+                        formatter:function (params) { //在此处直接用 formatter 属性
+                            console.log(params)  // 打印数据
+                            let week = null
+                            let fn = function (val) {
+                                if(!(!val) === true){
+                                    week = val.axisValue
+                                    if(val.value && val.value <= 0){
+                                        return val.value
+                                    }else if(val.value < 1000){
+                                        return val.value + 'us'
+                                    }else if(val.value < 1000 * 1000){
+                                        return val.value/1000 + 'ms'
+                                    }else{
+                                        return val.value/(1000*1000) + 's'
+                                    }
+                                }else{
+                                    return null
+                                }
+                            }
+                            let avg = fn(params[0])
+                            let max = fn(params[1])
+                            console.log(week,avg,max)
+                            let tip = ``
+                            if(avg !== null && max !== null){
+                                tip =` <div>${week}</div>
+                                       <div> <span style="display: inline-block;width: 10px;height: 10px;border-radius: 5px;margin: 3px 5px 3px 2px;background-color: ${params[0].color}"></span> ${avg}</div>
+                                       <div> <span style="display: inline-block;width: 10px;height: 10px;border-radius: 5px;margin: 3px 5px 3px 2px;background-color:${params[1].color} "></span> ${max}</div>`
+                            }else if(avg !== null && max === null){
+                                tip =` <div>${week}</div>
+                                       <div> <span style="display: inline-block;width: 10px;height: 10px;border-radius: 5px;margin: 3px 5px 3px 2px;background-color:${params[0].color}"></span> ${avg}</div>`
+                            }else if(avg === null && max !== null){
+                                tip =` <div>${week}</div>
+                                       <div> <span style="display: inline-block;width: 10px;height: 10px;border-radius: 5px;margin: 3px 5px 3px 2px;background-color: ${params[1].color}"></span> ${max}</div>`
+                            }else{
+                                tip = ``
+                            }
+                            // // 根据自己的需求返回数据
+                            return tip
+                        }
+                    },
+                    legend: {
+                        data: ['视频广告', '搜索引擎']
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    toolbox: {
+                        feature: {
+                            saveAsImage: {}
+                        }
+                    },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [
+                        {
+                            name: '视频广告',
+                            type: 'line',
+                            stack: '总量',
+                            data: [150, 9000000, 20100, 1540, 19000000, 33 , 4100]
+                        },
+                        {
+                            name: '搜索引擎',
+                            type: 'line',
+                            stack: '总量',
+                            data: [8200, 93200, 9001, 9340,10,12900000, 130]
+                        }
+                    ]
+                };
+                myChart.setOption(option)
+            },
             // arr1:父数组   arr2:子数组
             removePointById(value,datalist){
                 for(let i=0;i<datalist.length;i++){
@@ -153,7 +251,7 @@
                     this.value = ["1-1-1", "1-1-2","1-1-3", "1-2-1", "1-2-2","1-3","3"]
                     this.removePointById(this.value,this.datalist)
                 })
-            }
+            },
         }
     }
 </script>
